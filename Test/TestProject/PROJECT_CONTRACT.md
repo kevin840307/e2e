@@ -68,4 +68,4 @@ Python 不解析 TestMethod、DisplayName、CallMain 或 Workflow 語意；交�
 
 ## 7. Protected inputs
 
-AI 只能建立 TestProject target artifacts；不得修改 material、mapping、validator、tools、TestInfrastructure、TestProject.vbproj、PROJECT_CONTRACT.md。
+AI 只能建立 TestProject target artifacts；不得修改 material、mapping、validator、tools、TestInfrastructure、Test/TestProject/*.vbproj、PROJECT_CONTRACT.md。

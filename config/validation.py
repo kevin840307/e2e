@@ -23,7 +23,7 @@ def configure_paths(project_root=""):
     script_root = Path(__file__).resolve().parent.parent
     requested = Path(project_root).resolve() if project_root else script_root
 
-    if (requested / "TestProject.vbproj").is_file():
+    if requested.is_dir() and list(requested.glob("*.vbproj")):
         TEST = requested
         ROOT = requested.parent.parent if requested.parent.name.lower() == "test" else requested.parent
     else:
@@ -311,14 +311,20 @@ class CoverageChecker(Checker):
         report_dir = self.report.report_dir
         report_dir.mkdir(parents=True, exist_ok=True)
 
-        project = TEST / "TestProject.vbproj"
+        projects = sorted(TEST.glob("*.vbproj"))
+        if len(projects) != 1:
+            self.error(
+                "COVERAGE_PROJECT",
+                "Expected exactly one *.vbproj under Test/TestProject",
+                TEST,
+            )
+            return
+        project = projects[0]
+
         dotnet = shutil.which("dotnet")
         coverage = shutil.which("dotnet-coverage")
         coverage = Path(coverage) if coverage else Path.home() / ".dotnet" / "tools" / "dotnet-coverage.exe"
 
-        if not project.is_file():
-            self.error("COVERAGE_PROJECT", "TestProject.vbproj missing", project)
-            return
         if not dotnet:
             self.error("COVERAGE_TOOL", "dotnet SDK not found")
             return

@@ -63,6 +63,6 @@ Composite target 的全部 `entry_functions + critical_functions` 必須在同�
 
 ## Protected
 
-不可修改 material、mapping、validator、tools、TestInfrastructure、TestProject.vbproj、PROJECT_CONTRACT.md。
+不可修改 material、mapping、validator、tools、TestInfrastructure、Test/TestProject/*.vbproj、PROJECT_CONTRACT.md。
 
 完成前執行 task context 指定 validator，並傳入 `--block EquipmentCheck`。

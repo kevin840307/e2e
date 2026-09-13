@@ -17,11 +17,6 @@ if "%~1"=="" (
 
 set "TARGET_PROJECT=%~dp0Test\TestProject"
 
-if not exist "%TARGET_PROJECT%\TestProject.vbproj" (
-  echo ERROR: TestProject.vbproj not found:
-  echo   %TARGET_PROJECT%\TestProject.vbproj
-  exit /b 2
-)
 
 echo Block   : %~1
 echo Project : %TARGET_PROJECT%
