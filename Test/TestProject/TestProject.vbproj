@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net462</TargetFramework>
+    <OutputType>Library</OutputType>
+    <RootNamespace></RootNamespace>
+    <AssemblyName>TestProject</AssemblyName>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OptionExplicit>On</OptionExplicit>
+    <OptionStrict>Off</OptionStrict>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net462" Version="1.0.3" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.11.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.11.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Data" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\material\Project\Workflow.Abstractions\Workflow.Abstractions.vbproj" />
+    <ProjectReference Include="..\..\material\Project\Workflow.Engine\Workflow.Engine.vbproj" />
+    <ProjectReference Include="..\..\material\Project\Blocks.RouteDispatch\Blocks.RouteDispatch.vbproj" />
+    <ProjectReference Include="..\..\material\Project\Blocks.HoldLot\Blocks.HoldLot.vbproj" />
+    <ProjectReference Include="..\..\material\Project\Blocks.EquipmentCheck\Blocks.EquipmentCheck.vbproj" />
+    <ProjectReference Include="..\..\material\Project\Blocks.AlarmNotify\Blocks.AlarmNotify.vbproj" />
+    <ProjectReference Include="..\..\material\Project\Blocks.TokenGenerate\Blocks.TokenGenerate.vbproj" />
+    <ProjectReference Include="..\..\material\Project\Blocks.CommandSubmit\Blocks.CommandSubmit.vbproj" />
+    <ProjectReference Include="..\..\material\Project\Business.Route\Business.Route.vbproj" />
+    <ProjectReference Include="..\..\material\Project\Business.Equipment\Business.Equipment.vbproj" />
+    <ProjectReference Include="..\..\material\Project\Business.Command\Business.Command.vbproj" />
+    <ProjectReference Include="..\..\material\Project\Repository.Route\Repository.Route.vbproj" />
+    <ProjectReference Include="..\..\material\Project\Repository.Equipment\Repository.Equipment.vbproj" />
+    <ProjectReference Include="..\..\material\Project\Repository.Command\Repository.Command.vbproj" />
+    <ProjectReference Include="..\..\material\Project\Infra.FileDb\Infra.FileDb.vbproj" />
+    <ProjectReference Include="..\..\material\Project\Infra.Logging\Infra.Logging.vbproj" />
+    <ProjectReference Include="..\..\material\Project\Infra.HttpMock\Infra.HttpMock.vbproj" />
+    <ProjectReference Include="..\..\material\Project\Infra.MqMock\Infra.MqMock.vbproj" />
+    <ProjectReference Include="..\..\material\Project\Scheduler.Console\Scheduler.Console.vbproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,12 @@
+{
+  "SampleBlock": {
+    "entry_function": "SampleBlockEngine.Execute",
+    "critical_functions": [
+      "SampleService.Resolve"
+    ],
+    "min_coverage": 90,
+    "forbidden_prepare_tables": [
+      "SAMPLE_RESULT"
+    ]
+  }
+}

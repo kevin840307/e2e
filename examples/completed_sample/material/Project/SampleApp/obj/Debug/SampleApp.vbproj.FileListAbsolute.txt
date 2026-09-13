@@ -1,0 +1,6 @@
+C:\Users\kevin\e2e\examples\completed_sample\material\Project\SampleApp\bin\Debug\SampleApp.dll
+C:\Users\kevin\e2e\examples\completed_sample\material\Project\SampleApp\bin\Debug\SampleApp.pdb
+C:\Users\kevin\e2e\examples\completed_sample\material\Project\SampleApp\obj\Debug\SampleApp.vbproj.AssemblyReference.cache
+C:\Users\kevin\e2e\examples\completed_sample\material\Project\SampleApp\obj\Debug\SampleApp.vbproj.CoreCompileInputs.cache
+C:\Users\kevin\e2e\examples\completed_sample\material\Project\SampleApp\obj\Debug\SampleApp.dll
+C:\Users\kevin\e2e\examples\completed_sample\material\Project\SampleApp\obj\Debug\SampleApp.pdb

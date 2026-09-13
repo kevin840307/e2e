@@ -1,0 +1,10 @@
+COMMAND: C:\Program Files\dotnet\dotnet.EXE build C:\Users\kevin\e2e\examples\completed_sample\Test\TestProject\TestProject.vbproj --no-restore --configuration Debug --nologo
+
+  SampleApp -> C:\Users\kevin\e2e\examples\completed_sample\material\Project\SampleApp\bin\Debug\SampleApp.dll
+  TestProject -> C:\Users\kevin\e2e\examples\completed_sample\Test\TestProject\bin\Debug\TestProject.dll
+
+建置成功。
+    0 個警告
+    0 個錯誤
+
+經過時間 00:00:00.59

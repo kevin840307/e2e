@@ -1,0 +1,15 @@
+C:\Users\kevin\e2e\material\Project\Blocks.HoldLot\bin\Debug\Blocks.HoldLot.dll
+C:\Users\kevin\e2e\material\Project\Blocks.HoldLot\bin\Debug\Blocks.HoldLot.pdb
+C:\Users\kevin\e2e\material\Project\Blocks.HoldLot\bin\Debug\Infra.Logging.dll
+C:\Users\kevin\e2e\material\Project\Blocks.HoldLot\bin\Debug\Repository.Route.dll
+C:\Users\kevin\e2e\material\Project\Blocks.HoldLot\bin\Debug\Workflow.Abstractions.dll
+C:\Users\kevin\e2e\material\Project\Blocks.HoldLot\bin\Debug\Infra.FileDb.dll
+C:\Users\kevin\e2e\material\Project\Blocks.HoldLot\bin\Debug\Workflow.Abstractions.pdb
+C:\Users\kevin\e2e\material\Project\Blocks.HoldLot\bin\Debug\Repository.Route.pdb
+C:\Users\kevin\e2e\material\Project\Blocks.HoldLot\bin\Debug\Infra.Logging.pdb
+C:\Users\kevin\e2e\material\Project\Blocks.HoldLot\bin\Debug\Infra.FileDb.pdb
+C:\Users\kevin\e2e\material\Project\Blocks.HoldLot\obj\Debug\Blocks.HoldLot.vbproj.AssemblyReference.cache
+C:\Users\kevin\e2e\material\Project\Blocks.HoldLot\obj\Debug\Blocks.HoldLot.vbproj.CoreCompileInputs.cache
+C:\Users\kevin\e2e\material\Project\Blocks.HoldLot\obj\Debug\Blocks.H.C20A4CFC.Up2Date
+C:\Users\kevin\e2e\material\Project\Blocks.HoldLot\obj\Debug\Blocks.HoldLot.dll
+C:\Users\kevin\e2e\material\Project\Blocks.HoldLot\obj\Debug\Blocks.HoldLot.pdb

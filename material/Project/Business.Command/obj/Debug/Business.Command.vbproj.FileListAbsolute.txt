@@ -1,0 +1,11 @@
+C:\Users\kevin\e2e\material\Project\Business.Command\bin\Debug\Business.Command.dll
+C:\Users\kevin\e2e\material\Project\Business.Command\bin\Debug\Business.Command.pdb
+C:\Users\kevin\e2e\material\Project\Business.Command\bin\Debug\Repository.Command.dll
+C:\Users\kevin\e2e\material\Project\Business.Command\bin\Debug\Infra.FileDb.dll
+C:\Users\kevin\e2e\material\Project\Business.Command\bin\Debug\Repository.Command.pdb
+C:\Users\kevin\e2e\material\Project\Business.Command\bin\Debug\Infra.FileDb.pdb
+C:\Users\kevin\e2e\material\Project\Business.Command\obj\Debug\Business.Command.vbproj.AssemblyReference.cache
+C:\Users\kevin\e2e\material\Project\Business.Command\obj\Debug\Business.Command.vbproj.CoreCompileInputs.cache
+C:\Users\kevin\e2e\material\Project\Business.Command\obj\Debug\Business.9327F05C.Up2Date
+C:\Users\kevin\e2e\material\Project\Business.Command\obj\Debug\Business.Command.dll
+C:\Users\kevin\e2e\material\Project\Business.Command\obj\Debug\Business.Command.pdb

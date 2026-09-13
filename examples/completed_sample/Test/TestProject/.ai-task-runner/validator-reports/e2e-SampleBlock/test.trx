@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="144128df-e3ff-4d68-9d35-5ee651e89a22" name="Kevin@DESKTOP-HA3SSPJ 2026-09-12 14:50:52" runUser="DESKTOP-HA3SSPJ\Kevin" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-12T14:50:52.7440238+08:00" queuing="2026-09-12T14:50:52.7440238+08:00" start="2026-09-12T14:50:52.2142380+08:00" finish="2026-09-12T14:50:52.7460257+08:00" />
+  <TestSettings name="default" id="033d7a66-5558-4ffa-acec-d20e93f2e406">
+    <Deployment runDeploymentRoot="Kevin_DESKTOP-HA3SSPJ_2026-09-12_14_50_52" />
+  </TestSettings>
+  <TestLists>
+    <TestList name="不在清單中的結果" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="所有載入的結果" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="0" executed="0" passed="0" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <RunInfos>
+      <RunInfo computerName="DESKTOP-HA3SSPJ" outcome="Warning" timestamp="2026-09-12T14:50:52.6354495+08:00">
+        <Text>[MSTest][Discovery][C:\Users\kevin\e2e\examples\completed_sample\Test\TestProject\bin\Debug\TestProject.dll] MSTestAdapter 無法在組件 'C:\Users\kevin\e2e\examples\completed_sample\Test\TestProject\bin\Debug\TestProject.dll' 的類別 'SampleBlockTests' 中探索測試，因為 並未將物件參考設定為物件的執行個體。。</Text>
+      </RunInfo>
+      <RunInfo computerName="DESKTOP-HA3SSPJ" outcome="Warning" timestamp="2026-09-12T14:50:52.7299633+08:00">
+        <Text>C:\Users\kevin\e2e\examples\completed_sample\Test\TestProject\bin\Debug\TestProject.dll 中未提供任何測試。請確定已登錄了測試探索程式與執行程式，且平台與 Framework 版本設定皆正確，然後再試一次。</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

@@ -1,0 +1,88 @@
+{
+  "RouteDispatch": {
+    "workflow_blocks": [
+      "RouteDispatch"
+    ],
+    "entry_functions": [
+      "RouteDispatchBlock.Execute"
+    ],
+    "critical_functions": [
+      "RouteDecisionService.ResolveRoute",
+      "RouteRepository.QueryCondition"
+    ],
+    "min_coverage": 90,
+    "forbidden_prepare_tables": [
+      "DISPATCH_AUDIT"
+    ]
+  },
+  "HoldLot": {
+    "workflow_blocks": [
+      "HoldLot"
+    ],
+    "entry_functions": [
+      "HoldLotBlock.Execute"
+    ],
+    "critical_functions": [
+      "RouteRepository.InsertHold"
+    ],
+    "min_coverage": 90,
+    "forbidden_prepare_tables": [
+      "LOT_HOLD"
+    ]
+  },
+  "EquipmentCheck": {
+    "workflow_blocks": [
+      "EquipmentCheck"
+    ],
+    "entry_functions": [
+      "EquipmentCheckBlock.Execute"
+    ],
+    "critical_functions": [
+      "EquipmentService.Evaluate",
+      "EquipmentRepository.QueryEquipment"
+    ],
+    "min_coverage": 90
+  },
+  "AlarmNotify": {
+    "workflow_blocks": [
+      "AlarmNotify"
+    ],
+    "entry_functions": [
+      "AlarmNotifyBlock.Execute"
+    ],
+    "critical_functions": [
+      "FakeHttpClient.Post"
+    ],
+    "external_mocks": [
+      "api"
+    ],
+    "min_coverage": 90
+  },
+  "TokenGenerate_CommandSubmit": {
+    "workflow_blocks": [
+      "TokenGenerate",
+      "CommandSubmit"
+    ],
+    "entry_functions": [
+      "TokenGenerateBlock.Execute",
+      "CommandSubmitBlock.Execute"
+    ],
+    "critical_functions": [
+      "CommandService.GenerateToken",
+      "CommandRepository.SaveToken",
+      "CommandService.ValidateToken",
+      "CommandRepository.TokenExists",
+      "CommandService.SaveCommand",
+      "CommandRepository.SaveCommand",
+      "FakeMqClient.Publish"
+    ],
+    "external_mocks": [
+      "mq"
+    ],
+    "min_coverage": 90,
+    "forbidden_prepare_tables": [
+      "COMMAND_TOKEN",
+      "COMMAND_AUDIT"
+    ]
+  }
+}

@@ -1,0 +1,4 @@
+COMMAND: C:\Program Files\dotnet\dotnet.EXE restore C:\Users\kevin\e2e\examples\completed_sample\Test\TestProject\TestProject.vbproj --nologo
+
+  正在判斷要還原的專案...
+  所有專案都在最新狀態，可進行還原。

@@ -1,0 +1,41 @@
+- &block_defaults
+  project_root: .
+  validator: C:\Users\kevin\e2e\config\validation.py
+  goal_file: C:\Users\kevin\e2e\config\prompts\regression_all\HoldLot.md
+  validator_args: [--block, HoldLot]
+  ai_validator_prompt_file: C:\Users\kevin\e2e\config\ai_validator.template.md
+  ai_validator_count: 1
+  ai_validator_required_passes: 1
+  protect_files:
+    - C:\Users\kevin\e2e\material
+    - C:\Users\kevin\e2e\config\validation.py
+    - C:\Users\kevin\e2e\config\function_mapping.json
+    - C:\Users\kevin\e2e\config\ai_validator.template.md
+    - C:\Users\kevin\e2e\config\request_prompt.template.md
+    - C:\Users\kevin\e2e\tools
+    - C:\Users\kevin\e2e\Test\TestProject\TestInfrastructure
+    - C:\Users\kevin\e2e\Test\TestProject\TestProject.vbproj
+    - C:\Users\kevin\e2e\Test\TestProject\PROJECT_CONTRACT.md
+  max_attempts: 2
+  review_retries: 1
+  max_cycles: 20
+
+- <<: *block_defaults
+  goal_file: C:\Users\kevin\e2e\config\prompts\regression_all\RouteDispatch.md
+  validator_args: [--block, RouteDispatch]
+  ai_validator_prompt_file: C:\Users\kevin\e2e\config\ai_validator.template.md
+
+- <<: *block_defaults
+  goal_file: C:\Users\kevin\e2e\config\prompts\regression_all\EquipmentCheck.md
+  validator_args: [--block, EquipmentCheck]
+  ai_validator_prompt_file: C:\Users\kevin\e2e\config\ai_validator.template.md
+
+- <<: *block_defaults
+  goal_file: C:\Users\kevin\e2e\config\prompts\regression_all\AlarmNotify.md
+  validator_args: [--block, AlarmNotify]
+  ai_validator_prompt_file: C:\Users\kevin\e2e\config\ai_validator.template.md
+
+- <<: *block_defaults
+  goal_file: C:\Users\kevin\e2e\config\prompts\regression_all\TokenGenerate_CommandSubmit.md
+  validator_args: [--block, TokenGenerate_CommandSubmit]
+  ai_validator_prompt_file: C:\Users\kevin\e2e\config\ai_validator.template.md

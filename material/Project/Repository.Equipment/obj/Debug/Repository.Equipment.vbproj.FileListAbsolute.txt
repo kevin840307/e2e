@@ -1,0 +1,9 @@
+C:\Users\kevin\e2e\material\Project\Repository.Equipment\bin\Debug\Repository.Equipment.dll
+C:\Users\kevin\e2e\material\Project\Repository.Equipment\bin\Debug\Repository.Equipment.pdb
+C:\Users\kevin\e2e\material\Project\Repository.Equipment\bin\Debug\Infra.FileDb.dll
+C:\Users\kevin\e2e\material\Project\Repository.Equipment\bin\Debug\Infra.FileDb.pdb
+C:\Users\kevin\e2e\material\Project\Repository.Equipment\obj\Debug\Repository.Equipment.vbproj.AssemblyReference.cache
+C:\Users\kevin\e2e\material\Project\Repository.Equipment\obj\Debug\Repository.Equipment.vbproj.CoreCompileInputs.cache
+C:\Users\kevin\e2e\material\Project\Repository.Equipment\obj\Debug\Reposito.1C2AEE2E.Up2Date
+C:\Users\kevin\e2e\material\Project\Repository.Equipment\obj\Debug\Repository.Equipment.dll
+C:\Users\kevin\e2e\material\Project\Repository.Equipment\obj\Debug\Repository.Equipment.pdb

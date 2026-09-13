@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{EEA40180-1816-49C3-9E28-1EC6DA0327ED}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace></RootNamespace>
+    <AssemblyName>Scheduler.Console</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <OptionExplicit>On</OptionExplicit>
+    <OptionStrict>Off</OptionStrict>
+    <OptionInfer>On</OptionInfer>
+    <StartupObject>SchedulerApp.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.IO" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Text" />
+    <Import Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.vb" />
+    <Compile Include="AssemblyInfo.vb" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Workflow.Abstractions\Workflow.Abstractions.vbproj">
+      <Project>{C547DD8F-23E0-4A7A-AF64-AD78BC6215EF}</Project>
+      <Name>Workflow.Abstractions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Workflow.Engine\Workflow.Engine.vbproj">
+      <Project>{FC9138A3-5BB0-4E1B-9C1A-82FE8CA12F26}</Project>
+      <Name>Workflow.Engine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Blocks.RouteDispatch\Blocks.RouteDispatch.vbproj">
+      <Project>{7B00A903-FBDF-4D4B-988E-635D6F66C653}</Project>
+      <Name>Blocks.RouteDispatch</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Blocks.HoldLot\Blocks.HoldLot.vbproj">
+      <Project>{23AF26A1-F016-4CA3-B0E9-9509CC34A224}</Project>
+      <Name>Blocks.HoldLot</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Blocks.EquipmentCheck\Blocks.EquipmentCheck.vbproj">
+      <Project>{DD719F2E-8F25-4178-A9E9-E68976FA76F9}</Project>
+      <Name>Blocks.EquipmentCheck</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Blocks.AlarmNotify\Blocks.AlarmNotify.vbproj">
+      <Project>{49B1E749-0131-42C0-9C54-A5A9EE564B7C}</Project>
+      <Name>Blocks.AlarmNotify</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Blocks.TokenGenerate\Blocks.TokenGenerate.vbproj">
+      <Project>{494515CC-E333-4F42-81AE-ACB02B02EABD}</Project>
+      <Name>Blocks.TokenGenerate</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Blocks.CommandSubmit\Blocks.CommandSubmit.vbproj">
+      <Project>{055A9DD0-F6B9-4032-952A-2F0863887D42}</Project>
+      <Name>Blocks.CommandSubmit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Infra.FileDb\Infra.FileDb.vbproj">
+      <Project>{1E0E1BEE-D251-4A96-ACCC-3E8568C5A306}</Project>
+      <Name>Infra.FileDb</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+</Project>

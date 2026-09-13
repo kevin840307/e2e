@@ -1,0 +1,9 @@
+block: SampleBlock
+structure PASS: 1 SOP(s)
+cheat PASS
+SampleBlockEngine.Execute: 100.00%
+SampleService.Resolve: 100.00%
+coverage PASS
+errors: 0
+warnings: 0
+status: VALIDATION_PASSED

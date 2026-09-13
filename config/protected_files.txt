@@ -1,0 +1,12 @@
+material/**
+validation.py
+function_mapping.json
+ai_validator.md
+ai_validator.template.md
+request_prompt.template.md
+tools/ai_task_runner_validator.py
+tools/coverage_parser.py
+tools/generate_regression_prompts.py
+Test/TestProject/run_regression.py
+Test/TestProject/run_regression.bat
+run_regression.bat

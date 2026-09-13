@@ -1,0 +1,26 @@
+- goal_file: C:\Users\kevin\e2e\config\prompts\regression_all\RouteDispatch.md
+  project_root: .
+  validator: C:\Users\kevin\e2e\config\validation.py
+
+  validator_args:
+    - --block
+    - RouteDispatch
+
+  ai_validator_prompt_file: C:\Users\kevin\e2e\config\ai_validator.template.md
+  ai_validator_count: 3
+  ai_validator_required_passes: 3
+
+  protect_files:
+    - C:\Users\kevin\e2e\material
+    - C:\Users\kevin\e2e\config\validation.py
+    - C:\Users\kevin\e2e\config\function_mapping.json
+    - C:\Users\kevin\e2e\config\ai_validator.template.md
+    - C:\Users\kevin\e2e\config\request_prompt.template.md
+    - C:\Users\kevin\e2e\tools
+    - C:\Users\kevin\e2e\Test\TestProject\TestInfrastructure
+    - C:\Users\kevin\e2e\Test\TestProject\TestProject.vbproj
+    - C:\Users\kevin\e2e\Test\TestProject\PROJECT_CONTRACT.md
+
+  max_attempts: 2
+  review_retries: 3
+  max_cycles: 20

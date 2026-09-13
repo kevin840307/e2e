@@ -1,0 +1,2 @@
+PASS SampleBlockEngine.Execute: 100.00% (required > 90.00%)
+PASS SampleService.Resolve: 100.00% (required > 90.00%)

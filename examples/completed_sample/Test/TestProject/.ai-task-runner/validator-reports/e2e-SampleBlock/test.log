@@ -1,0 +1,19 @@
+COMMAND: C:\Users\kevin\.dotnet\tools\dotnet-coverage.EXE collect cmd /d /s /c ""C:\Program Files\dotnet\dotnet.EXE" test "C:\Users\kevin\e2e\examples\completed_sample\Test\TestProject\TestProject.vbproj" --no-restore --no-build --configuration Debug --results-directory "C:\Users\kevin\e2e\examples\completed_sample\Test\TestProject\.ai-task-runner\validator-reports\e2e-SampleBlock" --logger "trx;LogFileName=test-results.trx" --logger "console;verbosity=normal"" -f cobertura -o C:\Users\kevin\e2e\examples\completed_sample\Test\TestProject\.ai-task-runner\validator-reports\e2e-SampleBlock\coverage.cobertura.xml
+
+dotnet-coverage v18.11.2.0 [win-x64 - .NET 8.0.25]
+
+SessionId: cfcb671d-c453-460e-8d32-4cc4b8e089ae
+C:\Users\kevin\e2e\examples\completed_sample\Test\TestProject\bin\Debug\TestProject.dll 的測試回合 (.NETFramework,Version=v4.6.2)
+VSTest 版本 17.14.1 (x64)
+
+正在啟動測試執行，請稍候...
+總共有 1 個測試檔案與指定的模式相符。
+  已通過 條件：輸入值為 10；預期：主流程寫入結果 21 [85 ms]
+警告: 將要覆寫結果檔案: C:\Users\kevin\e2e\examples\completed_sample\Test\TestProject\.ai-task-runner\validator-reports\e2e-SampleBlock\test-results.trx
+結果檔案: C:\Users\kevin\e2e\examples\completed_sample\Test\TestProject\.ai-task-runner\validator-reports\e2e-SampleBlock\test-results.trx
+
+測試回合成功。
+測試數總計: 1
+     通過: 1
+ 時間總計: 1.1730 秒
+程式碼涵蓋範圍結果: C:\Users\kevin\e2e\examples\completed_sample\Test\TestProject\.ai-task-runner\validator-reports\e2e-SampleBlock\coverage.cobertura.xml。

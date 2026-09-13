@@ -1,0 +1,13 @@
+C:\Users\kevin\e2e\material\Project\Blocks.AlarmNotify\bin\Debug\Blocks.AlarmNotify.dll
+C:\Users\kevin\e2e\material\Project\Blocks.AlarmNotify\bin\Debug\Blocks.AlarmNotify.pdb
+C:\Users\kevin\e2e\material\Project\Blocks.AlarmNotify\bin\Debug\Infra.HttpMock.dll
+C:\Users\kevin\e2e\material\Project\Blocks.AlarmNotify\bin\Debug\Infra.Logging.dll
+C:\Users\kevin\e2e\material\Project\Blocks.AlarmNotify\bin\Debug\Workflow.Abstractions.dll
+C:\Users\kevin\e2e\material\Project\Blocks.AlarmNotify\bin\Debug\Workflow.Abstractions.pdb
+C:\Users\kevin\e2e\material\Project\Blocks.AlarmNotify\bin\Debug\Infra.Logging.pdb
+C:\Users\kevin\e2e\material\Project\Blocks.AlarmNotify\bin\Debug\Infra.HttpMock.pdb
+C:\Users\kevin\e2e\material\Project\Blocks.AlarmNotify\obj\Debug\Blocks.AlarmNotify.vbproj.AssemblyReference.cache
+C:\Users\kevin\e2e\material\Project\Blocks.AlarmNotify\obj\Debug\Blocks.AlarmNotify.vbproj.CoreCompileInputs.cache
+C:\Users\kevin\e2e\material\Project\Blocks.AlarmNotify\obj\Debug\Blocks.A.5635BC3B.Up2Date
+C:\Users\kevin\e2e\material\Project\Blocks.AlarmNotify\obj\Debug\Blocks.AlarmNotify.dll
+C:\Users\kevin\e2e\material\Project\Blocks.AlarmNotify\obj\Debug\Blocks.AlarmNotify.pdb

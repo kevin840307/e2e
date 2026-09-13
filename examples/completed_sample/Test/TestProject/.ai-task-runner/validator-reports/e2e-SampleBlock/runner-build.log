@@ -1,0 +1,1 @@
+COMMAND: C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\Roslyn\csc.exe /nologo /target:exe /out:C:\Users\kevin\e2e\examples\completed_sample\Test\TestProject\bin\Debug\MstestLiteRunner.exe C:\Users\kevin\e2e\examples\completed_sample\tools\mstest_lite_runner.cs
