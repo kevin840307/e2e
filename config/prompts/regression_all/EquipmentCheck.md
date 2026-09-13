@@ -1,106 +1,68 @@
-請產生 EquipmentCheck E2E Regression Unit Test。
+請產生 `EquipmentCheck` E2E Regression Test。
 
 ## Target
 
 - E2E target：`EquipmentCheck`
-- Production workflow blocks：`EquipmentCheck`
-- External mock boundaries in current evidence：`none required by mapping`
+- Workflow type：`Condition`
+- Production blocks：`EquipmentCheck`
+- External mocks：`none required by mapping`
 
-這是 single-block E2E。Main 的 workflow 只包含 EquipmentCheck。
+Single target：只測 EquipmentCheck，禁止自行串接其他 block。
 
-## Working Paths
+先讀 `PROJECT_CONTRACT.md`、BlockDocs、function_mapping.json 與 mapped source；足以判斷 Case 後就開始，不要掃完整 solution。
 
-路徑以本次 task context 為準，不可假設固定磁碟、使用者帳號或父目錄層數。不要建立額外 `Root/`。
+## 核心規則
 
-- `{PROJECT_ROOT}`：Runner 指定的測試專案 root
-- `{MATERIAL_ROOT}`：正式 source / BlockDocs / Issues / DDL / Scheduler evidence
-- `{CONFIG_ROOT}`：mapping / validation / prompt
-- `{TOOLS_ROOT}`：validator tools
-- `{PROJECT_CONTRACT}`：測試契約
+### 1. Workflow/SOP topology
 
-開始前先讀 `{PROJECT_CONTRACT}`。
+測試的是 **mapping 指定的 target**，不是讓 AI 自由設計 Workflow。
 
-## Output
+- single block：只建立/使用該 block 的 Action 或 Condition SOP。
+- composite：只照 `workflow_blocks` 指定順序串接。
+- 禁止為了 coverage 隨機加入其他 block。
+- 禁止把 composite 拆成獨立 E2E。
+
+建立 Workflow/SOP 的 SQL 若可共用，優先 reuse `Global/Workflow/`；不要每個 Case 複製一份。
+只有 mapping 明確為 composite，且 Global template 無法表示時，才允許 target-specific Workflow SQL。
+
+### 2. Case fixture
+
+每個 Case 只放自己的差異：
 
 ```text
 EquipmentCheck/
   EquipmentCheck.vb
-  Workflow/
-    Create SOP.sql
-    Create Condition.sql
-    Create Action.sql
-    Validation.sql
   EquipmentCheck-SOP-001/
     prepare.sql
-    mock_<external>.*   # only when required
+    mock_<external>.*   # optional
 ```
 
-Case 數量不固定。
+- `prepare.sql`：block parameters + DB before-state，只允許 INSERT。
+- `mock_*`：只模擬真正 external boundary，例如 API/HTTP、MQ、Kafka、NATS、WSDL/SOAP、gRPC。
+- 每個 SOP 必須獨立，不可依賴其他 SOP。
+- DB / Repository / Business / Block / Workflow / Main / mapped functions 不可 mock。
 
-`Workflow/` 是本 E2E target 自己的 workflow SQL，因此單積木與多積木 workflow 可以不同。這四份 SQL 是 documentation/spec SQL，不由 `RunPrepareSql` 執行：
-- `Create SOP.sql`
-- `Create Condition.sql`
-- `Create Action.sql`
-- `Validation.sql`
+### 3. Test flow
 
-`Global/` 只允許真正跨所有 E2E target 共用且與特定 workflow 無關的 SQL；不得把本 target 的 workflow definition 放到 Global。
+每個 TestMethod 固定：
 
-## SOP Fixture Package
+```text
+optional mock setup
+-> own prepare.sql
+-> runtime/env parameters
+-> CallMain("EquipmentCheck")
+-> Assert observable post-state
+```
 
-每個 `EquipmentCheck-SOP-NNN/` 是獨立 Case：
-- `prepare.sql`：只允許 INSERT before-state。
-- `mock_*`：只允許真正 external boundary，例如 API/HTTP、MQ、Kafka、NATS、WSDL/SOAP、gRPC、第三方 event/payload。
-
-Fixture 必須由自己的 TestMethod 讀取與註冊，不可跨 SOP 共用，也不可在 VB hardcode payload。
-
-可使用 TestInfrastructure：
-- `UseApiMock(...)`
-- `UseMqMock(...)`
-- `UseKafkaMock(...)`
-- `UseNatsMock(...)`
-- `UseGrpcMock(...)`
-- `UseWsdlMock(...)`
-- 或 generic `UseExternalMock(...)`
-
-DB / Repository / Business / Block / Workflow / Main / mapped Entry/Critical Function 都不可 mock。
-
-## UnitTest execution
-
-每個 TestMethod：
-1. optional external mock setup（僅真的需要時）
-2. `RunPrepareSql(...)`
-3. 設定合法 runtime/env input
-4. 只呼叫 `CallMain("EquipmentCheck")`
-5. `Assert.*` observable post-state
-
-不可直接 call `Block.Execute` / Business / Repository / Entry/Critical。
-
-每個 TestMethod 使用可讀中文 DisplayName，但 Python Structure Gate 不解析 VB 語法；這項由 AI Grill/Review 檢查。
-
-## Workflow SQL
-
-Workflow SQL 只描述 EquipmentCheck 的 workflow definition。
-
-Workflow SQL 不得製造 Case 的 expected result。Case-specific before-state 一律放自己的 `prepare.sql`。
+不可直接呼叫 Block.Execute / Business / Repository 來製造 coverage。
 
 ## Coverage
 
-Coverage 只由 `{CONFIG_ROOT}/function_mapping.json` 決定。Composite target 的所有 `entry_functions` 與 `critical_functions` 必須在同一次 E2E validation 中各自 > 90%，不可拆成兩個 block 各自驗證。
+Coverage 只看 `function_mapping.json`。
+Composite target 的全部 `entry_functions + critical_functions` 必須在同一次 validation 各自 `> min_coverage`。
 
-不可修改 `{MATERIAL_ROOT}`、`{CONFIG_ROOT}/validation.py`、`{CONFIG_ROOT}/function_mapping.json`、`{CONFIG_ROOT}/ai_validator.template.md`、`{TOOLS_ROOT}`、`TestProject.vbproj`、`TestInfrastructure/`。
+## Protected
 
-完成前執行 task context 指定 validator command，並傳入 `--block EquipmentCheck`。
+不可修改 material、mapping、validator、tools、TestInfrastructure、TestProject.vbproj、PROJECT_CONTRACT.md。
 
-## Planning
-
-優先讀：
-1. PROJECT_CONTRACT.md
-2. `{MATERIAL_ROOT}/BlockDocs/EquipmentCheck.md`
-3. Issues/*
-4. DDL/*
-5. Scheduler/*
-6. function_mapping.json
-7. mapped Entry/Critical source
-8. Main/Workflow source
-
-能判斷 meaningful E2E behavior 後立即建立 TODO，不要掃整個 solution。
+完成前執行 task context 指定 validator，並傳入 `--block EquipmentCheck`。

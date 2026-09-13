@@ -1,105 +1,71 @@
-# E2E Regression UnitTest Contract
+# E2E Regression Contract
 
-`Test/TestProject` 是 AI Task Runner project-root 與 E2E output root。
+`function_mapping.json` 的 key 是唯一 E2E target 定義。
 
-## E2E Target
+## 1. Target topology
 
-`config/function_mapping.json` 的 key 是 **E2E target**，不一定等於單一 Block。
+- `workflow_blocks = 1`：獨立 block，單獨測。
+- `workflow_blocks > 1`：非獨立 composite，必須依 mapping 順序一起測。
+- 禁止 AI 為了增加 coverage 自行串接其他 block。
+- 禁止把 composite 拆成獨立 E2E。
 
-- `workflow_blocks` 只有一個：single-block E2E。
-- `workflow_blocks` 有多個：Composite E2E；這些 block 必須由同一次 Main/Workflow、同一個 WorkflowContext 一起測，禁止拆成獨立 E2E。
+單積木 Workflow/SOP 只分 `Action` 或 `Condition`。可共用的建立 SQL 放 `Global/Workflow/` 並直接 reuse。
+只有 composite topology 無法由 Global template 表達時，才建立 target-specific Workflow SQL。
 
-例如：
+## 2. Case = prepare.sql + mock
 
-```text
-TokenGenerate_CommandSubmit
-  = TokenGenerate -> CommandSubmit
-```
-
-## Output
-
-每個 target：
+每個 Case：
 
 ```text
 <TARGET>/
   <TARGET>.vb
-  Workflow/
-    Create SOP.sql
-    Create Condition.sql
-    Create Action.sql
-    Validation.sql
   <TARGET>-SOP-001/
     prepare.sql
     mock_<external>.*   # optional
 ```
 
-`Workflow/*.sql` 是 target-owned documentation/spec SQL，不由 `RunPrepareSql` 執行。Composite target 的 workflow SQL 必須包含全部 blocks 與正確順序。
+- `prepare.sql`：block parameters、case-specific DB before-state；只允許 INSERT。
+- `mock_*`：API/HTTP、MQ、Kafka、NATS、WSDL/SOAP、gRPC、第三方 boundary。
+- 每個 SOP 完全獨立，不可共用 runtime state。
 
-`Global/` 只放真正跨 target 共用、且與特定 workflow definition 無關的資料；不得把 target-specific workflow SQL 放 Global。
+不可 mock：DB、Repository、Business、Block、Workflow、Main、mapped Entry/Critical function。
 
-## UnitTest execution
-
-每個 TestMethod 固定：
+## 3. Test execution
 
 ```text
 [optional external mock]
 -> own prepare.sql
+-> runtime/env parameters
 -> CallMain("<TARGET>")
 -> Assert observable production post-state
 ```
 
-External boundary 可 Mock：API/HTTP、MQ、Kafka、NATS、WSDL/SOAP、gRPC、第三方服務/event。
+不得直接呼叫 Block.Execute / Business / Repository 來製造 coverage。
 
-TestInfrastructure 提供：
-- `UseApiMock`
-- `UseMqMock`
-- `UseKafkaMock`
-- `UseNatsMock`
-- `UseGrpcMock`
-- `UseWsdlMock`
-- generic `UseExternalMock`
+## 4. Composite
 
-所有 fixture 必須在自己的 SOP folder，命名 `mock_*`，不可跨 SOP 共用。
+Composite 共用同一個 runtime DB、WorkflowContext、Main call，並完全照 `workflow_blocks` 順序執行。
 
-不可 mock：SQL/DB、Repository、Business、Block、Workflow、Main、Entry/Critical function。
-
-`prepare.sql` 只建立 before-state，只允許 INSERT；不可預建 Expected/Result/Audit/History/Final State。
-
-## Workflow dependency
-
-Composite E2E 必須共用同一個 runtime DB、WorkflowContext 與 Main call。不得為了 coverage 直接呼叫其中任一 Block.Execute。
-
-`TokenGenerate_CommandSubmit` 的正式順序：
+例如：
 
 ```text
-TokenGenerate
--> context[Command.Token]
--> CommandSubmit
--> external MQ
+TokenGenerate_CommandSubmit
+= TokenGenerate -> CommandSubmit
 ```
 
-## Coverage
+## 5. Coverage
 
-Coverage targets 只讀 `config/function_mapping.json`。
+同一次 validation 驗證 target 的全部 `entry_functions + critical_functions`；每個 mapped function 必須嚴格 `> min_coverage`。
 
-- single target：驗證其 `entry_functions + critical_functions`
-- composite target：同一次 validation 一起驗證全部 blocks 的 `entry_functions + critical_functions`
-- 每個 mapped function 都必須嚴格 `> min_coverage`
+## 6. Structure Gate
 
-## Structure Gate
-
-Python StructureChecker 只確認 filename/folder：
+Python 只檢查 filename/folder：
 - `<TARGET>/<TARGET>.vb`
-- `<TARGET>/Workflow/` 四個固定 SQL filename
 - 至少一個 `<TARGET>-SOP-NNN/prepare.sql`
 - SOP 只允許 `prepare.sql` 與 `mock_*`
 
-Python 不解析 VB TestMethod、DisplayName、CallMain 語意；這些由 AI Grill/Review 判斷。
+Python 不解析 TestMethod、DisplayName、CallMain 或 Workflow 語意；交給 AI Grill/Review。
 
-## Parameterized SQL
+## 7. Protected inputs
 
-`prepare.sql` 可使用 `{{PARAM_NAME}}`，由 `SqlParams(...)` 傳入。只參數化 value，不參數化 identifier；missing/unused parameter fail-fast。
-
-## Protected inputs
-
-AI 只能在 TestProject output 範圍建立 target artifacts。不得修改 material、mapping、validator、tools、TestInfrastructure、TestProject.vbproj。
+AI 只能建立 TestProject target artifacts；不得修改 material、mapping、validator、tools、TestInfrastructure、TestProject.vbproj、PROJECT_CONTRACT.md。

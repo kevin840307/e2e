@@ -202,13 +202,6 @@ class Checker:
 
 
 class StructureChecker(Checker):
-    WORKFLOW_SQL_FILES = (
-        "Create SOP.sql",
-        "Create Condition.sql",
-        "Create Action.sql",
-        "Validation.sql",
-    )
-
     def run(self):
         folder = TEST / self.block
         vb = folder / f"{self.block}.vb"
@@ -219,18 +212,6 @@ class StructureChecker(Checker):
 
         if not vb.is_file():
             self.error("STRUCTURE_FILE", "UnitTest file missing", vb)
-
-        # New E2E-target mappings declare workflow_blocks and therefore own
-        # target-specific Workflow SQL. Legacy/golden mappings remain compatible.
-        if "workflow_blocks" in self.cfg:
-            workflow = folder / "Workflow"
-            if not workflow.is_dir():
-                self.error("STRUCTURE_WORKFLOW", "Workflow SQL folder missing", workflow)
-            else:
-                for name in self.WORKFLOW_SQL_FILES:
-                    path = workflow / name
-                    if not path.is_file():
-                        self.error("STRUCTURE_WORKFLOW_FILE", "Workflow SQL file missing", path)
 
         sops = sorted(
             p for p in folder.iterdir()
@@ -257,7 +238,6 @@ class StructureChecker(Checker):
                 name = item.name
                 if name.lower() == "prepare.sql":
                     continue
-
                 if re.fullmatch(r"mock_[A-Za-z0-9_.-]+", name, re.I):
                     continue
 

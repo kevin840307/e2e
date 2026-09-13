@@ -15,28 +15,21 @@ def render(template: str, target: str, cfg: dict) -> str:
     blocks = cfg.get("workflow_blocks") or [target]
     mocks = cfg.get("external_mocks") or []
     composite = len(blocks) > 1
+    workflow_type = cfg.get("workflow_type") or ("Composite" if composite else "Single")
 
     workflow_rule = (
-        "這是 Composite E2E。Main 必須建立同一個 WorkflowContext，並依序執行："
-        + " -> ".join(blocks)
-        + "。禁止為這些積木建立獨立 E2E target，也禁止只測其中一個。"
+        "Composite target：只允許依序執行 " + " -> ".join(blocks) +
+        "；禁止拆開，也禁止加入 mapping 以外的 block。"
         if composite
-        else f"這是 single-block E2E。Main 的 workflow 只包含 {blocks[0]}。"
-    )
-    workflow_sql_rule = (
-        "Workflow SQL 必須描述完整 composite workflow，且 Action/SOP 順序必須是："
-        + " -> ".join(blocks)
-        + "。Validation.sql 必須驗證整條 workflow 的 post-state。"
-        if composite
-        else f"Workflow SQL 只描述 {blocks[0]} 的 workflow definition。"
+        else f"Single target：只測 {blocks[0]}，禁止自行串接其他 block。"
     )
 
     values = {
         "{{BLOCK}}": target,
+        "{{WORKFLOW_TYPE}}": workflow_type,
         "{{WORKFLOW_BLOCKS}}": " -> ".join(blocks),
         "{{EXTERNAL_MOCKS}}": ", ".join(mocks) if mocks else "none required by mapping",
         "{{WORKFLOW_RULE}}": workflow_rule,
-        "{{WORKFLOW_SQL_RULE}}": workflow_sql_rule,
     }
     for key, value in values.items():
         template = template.replace(key, value)

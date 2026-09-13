@@ -13,7 +13,8 @@
     "min_coverage": 90,
     "forbidden_prepare_tables": [
       "DISPATCH_AUDIT"
-    ]
+    ],
+    "workflow_type": "Action"
   },
   "HoldLot": {
     "workflow_blocks": [
@@ -28,7 +29,8 @@
     "min_coverage": 90,
     "forbidden_prepare_tables": [
       "LOT_HOLD"
-    ]
+    ],
+    "workflow_type": "Action"
   },
   "EquipmentCheck": {
     "workflow_blocks": [
@@ -41,7 +43,8 @@
       "EquipmentService.Evaluate",
       "EquipmentRepository.QueryEquipment"
     ],
-    "min_coverage": 90
+    "min_coverage": 90,
+    "workflow_type": "Condition"
   },
   "AlarmNotify": {
     "workflow_blocks": [
@@ -56,7 +59,8 @@
     "external_mocks": [
       "api"
     ],
-    "min_coverage": 90
+    "min_coverage": 90,
+    "workflow_type": "Action"
   },
   "TokenGenerate_CommandSubmit": {
     "workflow_blocks": [
@@ -83,6 +87,7 @@
     "forbidden_prepare_tables": [
       "COMMAND_TOKEN",
       "COMMAND_AUDIT"
-    ]
+    ],
+    "workflow_type": "Composite"
   }
 }

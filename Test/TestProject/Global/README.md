@@ -1,15 +1,20 @@
-# Global shared artifacts
+# Global shared Workflow/SOP templates
 
-`Global/` is only for artifacts that are genuinely shared by every E2E target and are not part of a target-specific workflow definition.
+`Global/Workflow/` 保留給真正可跨 E2E target 共用的 Workflow/SOP 建立 SQL。
 
-Target-specific workflow SQL belongs under:
+主要模型只有：
 
 ```text
-<TARGET>/Workflow/
-  Create SOP.sql
-  Create Condition.sql
-  Create Action.sql
-  Validation.sql
+Action
+Condition
 ```
 
-This is required because single-block and composite workflows have different SOP/Condition/Action definitions.
+原則：
+- single block 優先 reuse Action/Condition Global SQL；
+- 不要為每個 SOP Case 複製相同 Workflow SQL；
+- Case-specific block parameters / DB before-state 放 `prepare.sql`；
+- external response 放 `mock_*`；
+- 少數非獨立 composite 若 Global 無法表示，才使用 target-specific Workflow SQL；
+- 禁止為了測試而隨機串接本來獨立的 blocks。
+
+Global SQL 由專案提供/維護；AI 不應擅自改寫共用 schema/template。

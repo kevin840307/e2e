@@ -21,7 +21,7 @@ E2E rule:
 - Generate only `TokenGenerate_CommandSubmit/TokenGenerate_CommandSubmit.vb`.
 - Call only `CallMain("TokenGenerate_CommandSubmit")`.
 - Do not create independent TokenGenerate or CommandSubmit E2E folders/tests.
-- `Workflow/Create SOP.sql`, `Create Condition.sql`, `Create Action.sql`, and `Validation.sql` must describe the combined two-block workflow in the exact order above.
+- This composite must follow the exact mapping order above. Reuse Global Workflow/SOP templates when possible; only add target-specific workflow SQL if the shared templates cannot represent this dependency.
 - MQ is an external boundary and may use an owning SOP fixture such as `mock_mq_response.json`.
 - Minimal MQ fixture format: `{"ack": true}` or `{"ack": false}`.
 - `COMMAND_TOKEN` and `COMMAND_AUDIT` are production outputs for the normal success path and must not be pre-seeded by `prepare.sql`.

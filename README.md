@@ -20,19 +20,19 @@ TokenGenerate -> CommandSubmit -> MQ
 
 The mapping validates both blocks' entry/critical functions together. It must not be split into independent TokenGenerate and CommandSubmit E2E targets.
 
-## Target-owned workflow SQL
+## Workflow / SOP templates
 
-Each E2E target owns:
+Single-block SOP topology only has two common forms: `Action` or `Condition`. Reusable creation SQL belongs under `Global/Workflow/` and should be reused across targets.
+
+Case-specific differences belong only in each SOP folder:
 
 ```text
-<TARGET>/Workflow/
-  Create SOP.sql
-  Create Condition.sql
-  Create Action.sql
-  Validation.sql
+<TARGET>-SOP-NNN/
+  prepare.sql
+  mock_<external>.*   # optional
 ```
 
-This allows composite workflows to have different workflow-definition SQL from single-block workflows.
+Only a real non-independent composite may define target-specific workflow SQL when the Global templates cannot represent its topology. AI must never invent random block chains for coverage.
 
 ## External mock fixtures
 
