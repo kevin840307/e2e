@@ -1,6 +1,0 @@
-C:\Users\kevin\e2e\material\Project\Workflow.Abstractions\bin\Debug\Workflow.Abstractions.dll
-C:\Users\kevin\e2e\material\Project\Workflow.Abstractions\bin\Debug\Workflow.Abstractions.pdb
-C:\Users\kevin\e2e\material\Project\Workflow.Abstractions\obj\Debug\Workflow.Abstractions.vbproj.AssemblyReference.cache
-C:\Users\kevin\e2e\material\Project\Workflow.Abstractions\obj\Debug\Workflow.Abstractions.vbproj.CoreCompileInputs.cache
-C:\Users\kevin\e2e\material\Project\Workflow.Abstractions\obj\Debug\Workflow.Abstractions.dll
-C:\Users\kevin\e2e\material\Project\Workflow.Abstractions\obj\Debug\Workflow.Abstractions.pdb
