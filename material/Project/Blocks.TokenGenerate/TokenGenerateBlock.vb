@@ -14,8 +14,9 @@ Namespace TokenGenerate
 
         Public Overrides Sub Execute(context As WorkflowContext)
             Dim dbRoot = Param(Of String)("dbRoot","runtime_db")
+            Dim paramDbRoot = Param(Of String)("paramDbRoot", dbRoot)
             Dim correlationId = Param(Of String)("correlationId","")
-            Dim svc As New CommandService(New CommandRepository(dbRoot))
+            Dim svc As New CommandService(New CommandRepository(dbRoot, paramDbRoot))
             Dim token = svc.GenerateToken(correlationId)
             context.SetValue("Command.Token", token)
         End Sub

@@ -5,10 +5,39 @@ Imports FileDb
 Namespace RouteRepo
     Public Class RouteRepository
         Private ReadOnly _db As FileDbSession
+        Private ReadOnly _paramDb As FileDbSession
 
-        Public Sub New(dbRoot As String)
+        Public Sub New(dbRoot As String, Optional paramDbRoot As String = Nothing)
             _db = New FileDbSession(dbRoot)
+            _paramDb = New FileDbSession(If(String.IsNullOrWhiteSpace(paramDbRoot), dbRoot, paramDbRoot))
         End Sub
+
+        Public Function QueryDispatchParam(fab As String, product As String) As Dictionary(Of String, String)
+            Dim sql = "SELECT * FROM ROUTE_DISPATCH_PARAM WHERE FAB=@FAB AND PRODUCT=@PRODUCT AND ACTIVE_YN='Y'"
+            Dim rows = _paramDb.Query("ROUTE_DISPATCH_PARAM",
+                Function(r) V(r, "FAB") = fab AndAlso V(r, "PRODUCT") = product AndAlso V(r, "ACTIVE_YN") = "Y",
+                sql)
+            If rows.Count = 0 Then Return Nothing
+            Return rows(0)
+        End Function
+
+        Public Function QueryHoldPolicy(fab As String, product As String, reason As String) As Dictionary(Of String, String)
+            Dim sql = "SELECT * FROM HOLD_POLICY WHERE FAB=@FAB AND PRODUCT=@PRODUCT AND REASON=@REASON AND ACTIVE_YN='Y'"
+            Dim rows = _paramDb.Query("HOLD_POLICY",
+                Function(r) V(r, "FAB") = fab AndAlso V(r, "PRODUCT") = product AndAlso V(r, "REASON") = reason AndAlso V(r, "ACTIVE_YN") = "Y",
+                sql)
+            If rows.Count = 0 Then Return Nothing
+            Return rows(0)
+        End Function
+
+        Public Function QueryLotState(lotId As String) As Dictionary(Of String, String)
+            Dim sql = "SELECT * FROM LOT_STATE WHERE LOT_ID=@LOT_ID"
+            Dim rows = _db.Query("LOT_STATE",
+                Function(r) V(r, "LOT_ID") = lotId,
+                sql)
+            If rows.Count = 0 Then Return Nothing
+            Return rows(0)
+        End Function
 
         Public Function QueryRoutePolicy(fab As String, product As String) As Dictionary(Of String, String)
             Dim sql = "SELECT * FROM ROUTE_POLICY WHERE FAB=@FAB AND PRODUCT=@PRODUCT AND ENABLED='Y'"

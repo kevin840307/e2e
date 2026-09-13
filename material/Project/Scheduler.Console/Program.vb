@@ -31,6 +31,7 @@ Namespace SchedulerApp
                     wf.Blocks.Add(New RouteDispatchBlock With {
                         .Parameters = New Dictionary(Of String, Object) From {
                             {"dbRoot", dbRoot},
+                            {"paramDbRoot", Env("E2E_PARAM_DB_ROOT", dbRoot)},
                             {"fab", Env("E2E_FAB", "FAB1")},
                             {"lotId", Env("E2E_LOT_ID", "LOT-001")},
                             {"product", Env("E2E_PRODUCT", "")},
@@ -44,14 +45,18 @@ Namespace SchedulerApp
                     wf.Blocks.Add(New HoldLotBlock With {
                         .Parameters = New Dictionary(Of String, Object) From {
                             {"dbRoot", dbRoot},
+                            {"paramDbRoot", Env("E2E_PARAM_DB_ROOT", dbRoot)},
                             {"lotId", Env("E2E_LOT_ID", "LOT-001")},
-                            {"reason", Env("E2E_HOLD_REASON", "E2E_HOLD")}
+                            {"reason", Env("E2E_HOLD_REASON", "E2E_HOLD")},
+                            {"fab", Env("E2E_FAB", "FAB1")},
+                            {"product", Env("E2E_PRODUCT", "")}
                         }
                     })
                 Case "EquipmentCheck"
                     wf.Blocks.Add(New EquipmentCheckBlock With {
                         .Parameters = New Dictionary(Of String, Object) From {
                             {"dbRoot", dbRoot},
+                            {"paramDbRoot", Env("E2E_PARAM_DB_ROOT", dbRoot)},
                             {"eqId", Env("E2E_EQ_ID", "EQ-01")},
                             {"requiredMode", Env("E2E_REQUIRED_MODE", "")}
                         }
@@ -59,6 +64,9 @@ Namespace SchedulerApp
                 Case "AlarmNotify"
                     wf.Blocks.Add(New AlarmNotifyBlock With {
                         .Parameters = New Dictionary(Of String, Object) From {
+                            {"dbRoot", dbRoot},
+                            {"configDbRoot", Env("E2E_CONFIG_DB_ROOT", dbRoot)},
+                            {"channel", Env("E2E_ALARM_CHANNEL", "DEFAULT")},
                             {"url", Env("E2E_ALARM_URL", "http://mock/alarm")},
                             {"message", Env("E2E_MESSAGE", "E2E")}
                         }
@@ -68,14 +76,18 @@ Namespace SchedulerApp
                     wf.Blocks.Add(New TokenGenerateBlock With {
                         .Parameters = New Dictionary(Of String, Object) From {
                             {"dbRoot", dbRoot},
+                            {"paramDbRoot", Env("E2E_PARAM_DB_ROOT", dbRoot)},
                             {"correlationId", Env("E2E_CORRELATION_ID", "CMD-001")}
                         }
                     })
                     wf.Blocks.Add(New CommandSubmitBlock With {
                         .Parameters = New Dictionary(Of String, Object) From {
                             {"dbRoot", dbRoot},
+                            {"paramDbRoot", Env("E2E_PARAM_DB_ROOT", dbRoot)},
+                            {"masterDbRoot", Env("E2E_MASTER_DB_ROOT", dbRoot)},
                             {"command", Env("E2E_COMMAND", "START")},
-                            {"mqTopic", Env("E2E_MQ_TOPIC", "command.submit")}
+                            {"mqTopic", Env("E2E_MQ_TOPIC", "command.submit")},
+                            {"mqEndpoint", Env("E2E_MQ_ENDPOINT", "COMMAND_SUBMIT")}
                         }
                     })
                 Case Else

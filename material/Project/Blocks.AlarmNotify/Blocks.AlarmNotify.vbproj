@@ -58,6 +58,10 @@
       <Project>{6A86B1B1-819F-4EA8-9EC5-63691C5E83B6}</Project>
       <Name>Infra.HttpMock</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Infra.FileDb\Infra.FileDb.vbproj">
+      <Project>{19AD6C6D-B2B3-4B94-9B8A-C6E9E1C2C145}</Project>
+      <Name>Infra.FileDb</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

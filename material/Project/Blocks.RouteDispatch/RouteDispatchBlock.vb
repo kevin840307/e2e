@@ -16,6 +16,7 @@ Namespace RouteDispatch
 
         Public Overrides Sub Execute(context As WorkflowContext)
             Dim dbRoot = Param(Of String)("dbRoot","runtime_db")
+            Dim paramDbRoot = Param(Of String)("paramDbRoot", dbRoot)
             Dim fab = Param(Of String)("fab","FAB1")
             Dim lotId = Param(Of String)("lotId","LOT-UNKNOWN")
             Dim product = Param(Of String)("product","")
@@ -25,7 +26,7 @@ Namespace RouteDispatch
             Dim maxQueue = Param(Of Integer)("maxQueue", 10)
 
             Dim logger As New AppLogger()
-            Dim repo As New RouteRepository(dbRoot)
+            Dim repo As New RouteRepository(dbRoot, paramDbRoot)
             Dim svc As New RouteDecisionService(repo)
 
             Dim route = svc.ResolveRoute(fab, product, mode, allowSub)

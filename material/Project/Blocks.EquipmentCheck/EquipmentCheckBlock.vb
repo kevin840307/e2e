@@ -14,10 +14,11 @@ Namespace EquipmentCheck
 
         Public Overrides Sub Execute(context As WorkflowContext)
             Dim dbRoot = Param(Of String)("dbRoot","runtime_db")
+            Dim paramDbRoot = Param(Of String)("paramDbRoot", dbRoot)
             Dim eqId = Param(Of String)("eqId","")
             Dim requiredMode = Param(Of String)("requiredMode","")
 
-            Dim svc As New EquipmentService(New EquipmentRepository(dbRoot))
+            Dim svc As New EquipmentService(New EquipmentRepository(dbRoot, paramDbRoot))
             context.SetValue("EquipmentCheck.Result", svc.Evaluate(eqId, requiredMode))
         End Sub
     End Class

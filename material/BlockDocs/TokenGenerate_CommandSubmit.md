@@ -6,8 +6,17 @@ Required production workflow order:
 
 ```text
 TokenGenerateBlock.Execute
+  -> CommandService.GenerateToken
+  -> CommandRepository.QueryTokenPolicy
+  -> CommandRepository.SaveToken
   -> WorkflowContext["Command.Token"]
   -> CommandSubmitBlock.Execute
+  -> CommandService.ValidateToken
+  -> CommandRepository.TokenExists
+  -> CommandService.ValidateCommand
+  -> CommandRepository.QueryCommandRule
+  -> CommandService.ResolveMqTopic
+  -> CommandRepository.QueryMqEndpoint
   -> MQ publish
 ```
 
@@ -27,9 +36,10 @@ E2E rule:
 - `COMMAND_TOKEN` and `COMMAND_AUDIT` are production outputs for the normal success path and must not be pre-seeded by `prepare.sql`.
 - This composite may still require fixture SQL for both blocks' parameters and lookup dependencies. Do not treat "do not pre-seed output tables" as "no SQL is needed."
 - Prepare before-state for TokenGenerate, CommandSubmit, and their dependency handoff independently:
-  - SOP/control status row that makes Main pick this target/SOP;
-  - TokenGenerate parameter/config/policy/master-data rows used before token creation;
-  - CommandSubmit parameter/config/routing/validation rows used after `WorkflowContext["Command.Token"]` is set;
+  - `E2E_SOP_CONTROL` SOP/control status row that makes Main pick this target/SOP;
+  - `COMMAND_TOKEN_POLICY` rows in the parameter DB used by TokenGenerate before token creation;
+  - `COMMAND_RULE` rows in the parameter DB used by CommandSubmit to validate whether the command may be submitted;
+  - `MQ_ENDPOINT` rows in the master/config DB used by CommandSubmit to resolve the MQ topic;
   - any extra tables queried by repositories/services while driving the case to the intended branch.
 - If those dependencies live in different DB roots/schemas, split them into multiple `prepare*.sql` files such as `prepare.sql`, `prepare.params.sql`, and `prepare.command-db.sql`, and execute each from the TestMethod before `CallMain()`.
 - Every fixture SQL file must use the safe fixture rules: existing control rows may only update `STATUS`; all other rows are insert-if-not-exists by an explicit key; no delete, broad update, merge, or output pre-seeding.
