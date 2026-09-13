@@ -18,6 +18,9 @@ Public Class XXXTests
             dbRoot,
             SqlParams("INPUT_ID", "CASE001")
         )
+        ' Optional: split additional before-state by DB/root when the SOP queries more than one data source.
+        ' RunPrepareSql("XXX\XXX-SOP-001\prepare.params.sql", dbRoot)
+        ' RunPrepareSql("XXX\XXX-SOP-001\prepare.master.sql", masterDbRoot)
 
         Dim rc = CallMain()
         Assert.AreEqual(0, rc)

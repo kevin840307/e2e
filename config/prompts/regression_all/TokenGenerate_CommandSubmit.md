@@ -34,14 +34,20 @@ TokenGenerate_CommandSubmit/
   TokenGenerate_CommandSubmit.vb
   TokenGenerate_CommandSubmit-SOP-001/
     prepare.sql
+    prepare.params.sql       # optional: block/SOP parameter tables
+    prepare.<db-name>.sql    # optional: when before-state belongs to another DB/root
     mock_<external>.*   # optional
 ```
 
-- `prepare.sql`：必須先用 control table 啟動目標 SOP，再準備 case-specific DB before-state。
+- `prepare*.sql`：必須先用 control table 啟動目標 SOP，再準備 case-specific DB before-state。
   - 啟動列只能使用 `UPSERT_STATUS INTO E2E_SOP_CONTROL (TARGET, SOP, STATUS) VALUES (...) KEY (TARGET, SOP)`；若資料已存在，只能更新 `STATUS`。
   - 其他 before-state 只能使用 `INSERT_IF_NOT_EXISTS INTO <TABLE> (...) VALUES (...) KEY (...)`；若 key 已存在，不可更新、不覆蓋、不刪除。
   - 禁止 `DELETE`、一般 `UPDATE`、`MERGE`，也禁止用 fixture 改 production output table。
   - 新增 fixture 前先檢查目前專案既有測試資料；若 DB 內可能已有相同 key 且內容會與本 case 衝突，換一組不衝突的 lotId / eqId / product / correlationId 等資料。
+  - 不只補 block parameters；只要 SOP 流程會查詢的資料、跨 block 依賴資料、routing/recipe/policy/config/master data、或讓流程走到指定分支所需的資料，都要以同樣規則準備。
+  - 若資料分屬不同 DB/root/schema，拆成多個 `prepare*.sql`，TestMethod 依序呼叫各自的 `RunPrepareSql(...)`；每個 SQL 檔只處理自己的 DB/root，不要把不同 DB 的資料混在同一檔。
+  - `prepare.sql` 保留作為本 SOP 的主啟動/主 DB fixture；參數表可用 `prepare.params.sql`，其他 DB 可用 `prepare.<db-name>.sql`。
+- Composite target 也必須準備完整依賴資料，不可只準備第一個 block。像 `TokenGenerate_CommandSubmit` 這類 target，必須同時考慮 TokenGenerate 的參數/查表資料、CommandSubmit 的參數/查表資料、兩者交接所需的 context/DB dependency，以及 MQ boundary fixture；但 production output table 仍不可預先造資料。
 - `mock_*`：只模擬真正 external boundary，例如 API/HTTP、MQ、Kafka、NATS、WSDL/SOAP、gRPC。
 - 每個 SOP 必須獨立，不可依賴其他 SOP。
 - DB / Repository / Business / Block / Workflow / Main / mapped functions 不可 mock。
@@ -52,7 +58,7 @@ TokenGenerate_CommandSubmit/
 
 ```text
 optional mock setup
--> own prepare.sql
+-> own prepare*.sql, one call per DB/root when needed
 -> runtime/env parameters
 -> CallMain()
 -> Assert observable post-state

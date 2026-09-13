@@ -236,7 +236,7 @@ class StructureChecker(Checker):
                     continue
 
                 name = item.name
-                if name.lower() == "prepare.sql":
+                if re.fullmatch(r"prepare(?:\.[A-Za-z0-9_-]+)?\.sql", name, re.I):
                     continue
                 if re.fullmatch(r"mock_[A-Za-z0-9_.-]+", name, re.I):
                     continue
@@ -245,7 +245,7 @@ class StructureChecker(Checker):
                     "STRUCTURE_ARTIFACT",
                     "Unsupported SOP filename",
                     item,
-                    fix="Only prepare.sql and mock_* files are allowed in a SOP folder.",
+                    fix="Only prepare*.sql and mock_* files are allowed in a SOP folder.",
                 )
 
         if not any(x.code.startswith("STRUCTURE_") for x in self.report.errors):
@@ -261,28 +261,39 @@ class CheatChecker(Checker):
             if not sop.is_dir():
                 continue
 
-            prepare = sop / "prepare.sql"
-            if not prepare.is_file():
-                continue
+            prepare_files = sorted(
+                item for item in sop.iterdir()
+                if item.is_file() and re.fullmatch(r"prepare(?:\.[A-Za-z0-9_-]+)?\.sql", item.name, re.I)
+            )
 
-            sql = re.sub(r"--[^\r\n]*", "", read(prepare))
-            statements = [x.strip() for x in sql.split(";") if x.strip()]
+            for prepare in prepare_files:
+                sql = re.sub(r"--[^\r\n]*", "", read(prepare))
+                statements = [x.strip() for x in sql.split(";") if x.strip()]
 
-            for stmt in statements:
-                if not re.match(r"^INSERT\s+INTO\b", stmt, re.I | re.S):
-                    self.error(
-                        "CHEAT_SQL",
-                        "prepare.sql may only create before-state with INSERT",
-                        prepare,
-                    )
+                allowed_fixture_sql = (
+                    r"^(INSERT\s+INTO|INSERT_IF_NOT_EXISTS\s+INTO|UPSERT_STATUS\s+INTO)\b"
+                )
 
-            for table in self.cfg.get("forbidden_prepare_tables", []):
-                if re.search(r"\bINSERT\s+INTO\s+" + re.escape(table) + r"\b", sql, re.I):
-                    self.error(
-                        "CHEAT_RESULT",
-                        "prepare.sql manufactures production result",
-                        table,
-                    )
+                for stmt in statements:
+                    if not re.match(allowed_fixture_sql, stmt, re.I | re.S):
+                        self.error(
+                            "CHEAT_SQL",
+                            "prepare*.sql may only create safe before-state with UPSERT_STATUS or INSERT_IF_NOT_EXISTS",
+                            prepare,
+                        )
+
+                for table in self.cfg.get("forbidden_prepare_tables", []):
+                    if re.search(
+                        r"\b(INSERT\s+INTO|INSERT_IF_NOT_EXISTS\s+INTO|UPSERT_STATUS\s+INTO)\s+" +
+                        re.escape(table) + r"\b",
+                        sql,
+                        re.I,
+                    ):
+                        self.error(
+                            "CHEAT_RESULT",
+                            "prepare*.sql manufactures production result",
+                            table,
+                        )
 
             for item in sop.iterdir():
                 if (

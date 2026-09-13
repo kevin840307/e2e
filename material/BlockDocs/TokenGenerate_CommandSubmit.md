@@ -19,12 +19,20 @@ Dependency evidence:
 
 E2E rule:
 - Generate only `TokenGenerate_CommandSubmit/TokenGenerate_CommandSubmit.vb`.
-- Call only `CallMain("TokenGenerate_CommandSubmit")`.
+- Call only `CallMain()`; Main must read the ready control/status row to select `TokenGenerate_CommandSubmit` and its SOP.
 - Do not create independent TokenGenerate or CommandSubmit E2E folders/tests.
 - This composite must follow the exact mapping order above. Reuse Global Workflow/SOP templates when possible; only add target-specific workflow SQL if the shared templates cannot represent this dependency.
 - MQ is an external boundary and may use an owning SOP fixture such as `mock_mq_response.json`.
 - Minimal MQ fixture format: `{"ack": true}` or `{"ack": false}`.
 - `COMMAND_TOKEN` and `COMMAND_AUDIT` are production outputs for the normal success path and must not be pre-seeded by `prepare.sql`.
+- This composite may still require fixture SQL for both blocks' parameters and lookup dependencies. Do not treat "do not pre-seed output tables" as "no SQL is needed."
+- Prepare before-state for TokenGenerate, CommandSubmit, and their dependency handoff independently:
+  - SOP/control status row that makes Main pick this target/SOP;
+  - TokenGenerate parameter/config/policy/master-data rows used before token creation;
+  - CommandSubmit parameter/config/routing/validation rows used after `WorkflowContext["Command.Token"]` is set;
+  - any extra tables queried by repositories/services while driving the case to the intended branch.
+- If those dependencies live in different DB roots/schemas, split them into multiple `prepare*.sql` files such as `prepare.sql`, `prepare.params.sql`, and `prepare.command-db.sql`, and execute each from the TestMethod before `CallMain()`.
+- Every fixture SQL file must use the safe fixture rules: existing control rows may only update `STATUS`; all other rows are insert-if-not-exists by an explicit key; no delete, broad update, merge, or output pre-seeding.
 
 
 Meaningful E2E behaviors:
