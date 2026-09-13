@@ -19,7 +19,7 @@ Public Class XXXTests
             SqlParams("INPUT_ID", "CASE001")
         )
 
-        Dim rc = CallMain("XXX")
+        Dim rc = CallMain()
         Assert.AreEqual(0, rc)
     End Sub
 End Class

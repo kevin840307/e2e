@@ -1,5 +1,7 @@
 Imports System
 Imports System.Collections.Generic
+Imports System.Linq
+Imports FileDb
 Imports Workflow
 Imports Engine
 Imports RouteDispatch
@@ -14,16 +16,21 @@ Namespace SchedulerApp
         Public LastContext As WorkflowContext
 
         Public Function Main(args As String()) As Integer
-            If args Is Nothing OrElse args.Length = 0 Then Return 2
-            Dim target = args(0)
+            Dim dbRoot = Env("E2E_DB_ROOT", "runtime_db")
+            Dim instruction = LoadReadyInstruction(dbRoot, args)
+            If instruction Is Nothing Then Return 2
+
+            Dim target = instruction("TARGET")
             Dim ctx As New WorkflowContext()
             Dim wf As New WorkflowDefinition With {.Name = target & "E2E"}
+            ctx.SetValue("E2E.Target", target)
+            ctx.SetValue("E2E.SOP", instruction("SOP"))
 
             Select Case target
                 Case "RouteDispatch"
                     wf.Blocks.Add(New RouteDispatchBlock With {
                         .Parameters = New Dictionary(Of String, Object) From {
-                            {"dbRoot", Env("E2E_DB_ROOT", "runtime_db")},
+                            {"dbRoot", dbRoot},
                             {"fab", Env("E2E_FAB", "FAB1")},
                             {"lotId", Env("E2E_LOT_ID", "LOT-001")},
                             {"product", Env("E2E_PRODUCT", "")},
@@ -36,7 +43,7 @@ Namespace SchedulerApp
                 Case "HoldLot"
                     wf.Blocks.Add(New HoldLotBlock With {
                         .Parameters = New Dictionary(Of String, Object) From {
-                            {"dbRoot", Env("E2E_DB_ROOT", "runtime_db")},
+                            {"dbRoot", dbRoot},
                             {"lotId", Env("E2E_LOT_ID", "LOT-001")},
                             {"reason", Env("E2E_HOLD_REASON", "E2E_HOLD")}
                         }
@@ -44,7 +51,7 @@ Namespace SchedulerApp
                 Case "EquipmentCheck"
                     wf.Blocks.Add(New EquipmentCheckBlock With {
                         .Parameters = New Dictionary(Of String, Object) From {
-                            {"dbRoot", Env("E2E_DB_ROOT", "runtime_db")},
+                            {"dbRoot", dbRoot},
                             {"eqId", Env("E2E_EQ_ID", "EQ-01")},
                             {"requiredMode", Env("E2E_REQUIRED_MODE", "")}
                         }
@@ -60,13 +67,13 @@ Namespace SchedulerApp
                     ' Dependency workflow: these two blocks are one E2E target and must run together.
                     wf.Blocks.Add(New TokenGenerateBlock With {
                         .Parameters = New Dictionary(Of String, Object) From {
-                            {"dbRoot", Env("E2E_DB_ROOT", "runtime_db")},
+                            {"dbRoot", dbRoot},
                             {"correlationId", Env("E2E_CORRELATION_ID", "CMD-001")}
                         }
                     })
                     wf.Blocks.Add(New CommandSubmitBlock With {
                         .Parameters = New Dictionary(Of String, Object) From {
-                            {"dbRoot", Env("E2E_DB_ROOT", "runtime_db")},
+                            {"dbRoot", dbRoot},
                             {"command", Env("E2E_COMMAND", "START")},
                             {"mqTopic", Env("E2E_MQ_TOPIC", "command.submit")}
                         }
@@ -76,9 +83,54 @@ Namespace SchedulerApp
             End Select
 
             LastContext = ctx
+            UpdateInstructionStatus(dbRoot, instruction, "RUNNING")
             Dim runner As New WorkflowRunner()
             runner.Run(wf, ctx)
+            UpdateInstructionStatus(dbRoot, instruction, "DONE")
             Return 0
+        End Function
+
+        Private Function LoadReadyInstruction(
+            dbRoot As String,
+            args As String()) As Dictionary(Of String, String)
+
+            Dim requestedTarget As String = Nothing
+            If args IsNot Nothing AndAlso args.Length > 0 Then requestedTarget = args(0)
+
+            Dim db As New FileDbSession(dbRoot)
+            Return db.Query(
+                    "E2E_SOP_CONTROL",
+                    Function(r)
+                        Return V(r, "STATUS") = "READY" AndAlso
+                            (String.IsNullOrWhiteSpace(requestedTarget) OrElse
+                             String.Equals(V(r, "TARGET"), requestedTarget, StringComparison.OrdinalIgnoreCase))
+                    End Function,
+                    "SELECT TOP 1 TARGET,SOP FROM E2E_SOP_CONTROL WHERE STATUS='READY'").
+                OrderBy(Function(r) V(r, "TARGET")).
+                ThenBy(Function(r) V(r, "SOP")).
+                FirstOrDefault()
+        End Function
+
+        Private Sub UpdateInstructionStatus(
+            dbRoot As String,
+            instruction As IDictionary(Of String, String),
+            status As String)
+
+            Dim db As New FileDbSession(dbRoot)
+            db.Update(
+                "E2E_SOP_CONTROL",
+                Function(r)
+                    Return V(r, "TARGET") = instruction("TARGET") AndAlso
+                        V(r, "SOP") = instruction("SOP")
+                End Function,
+                Sub(r) r("STATUS") = status,
+                "UPDATE E2E_SOP_CONTROL SET STATUS='" & status & "' WHERE TARGET=@TARGET AND SOP=@SOP")
+        End Sub
+
+        Private Function V(row As IDictionary(Of String, String), name As String) As String
+            Dim value As String = Nothing
+            If row IsNot Nothing AndAlso row.TryGetValue(name, value) Then Return value
+            Return ""
         End Function
 
         Private Function Env(name As String, defaultValue As String) As String

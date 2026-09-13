@@ -37,7 +37,11 @@ HoldLot/
     mock_<external>.*   # optional
 ```
 
-- `prepare.sql`：block parameters + DB before-state，只允許 INSERT。
+- `prepare.sql`：必須先用 control table 啟動目標 SOP，再準備 case-specific DB before-state。
+  - 啟動列只能使用 `UPSERT_STATUS INTO E2E_SOP_CONTROL (TARGET, SOP, STATUS) VALUES (...) KEY (TARGET, SOP)`；若資料已存在，只能更新 `STATUS`。
+  - 其他 before-state 只能使用 `INSERT_IF_NOT_EXISTS INTO <TABLE> (...) VALUES (...) KEY (...)`；若 key 已存在，不可更新、不覆蓋、不刪除。
+  - 禁止 `DELETE`、一般 `UPDATE`、`MERGE`，也禁止用 fixture 改 production output table。
+  - 新增 fixture 前先檢查目前專案既有測試資料；若 DB 內可能已有相同 key 且內容會與本 case 衝突，換一組不衝突的 lotId / eqId / product / correlationId 等資料。
 - `mock_*`：只模擬真正 external boundary，例如 API/HTTP、MQ、Kafka、NATS、WSDL/SOAP、gRPC。
 - 每個 SOP 必須獨立，不可依賴其他 SOP。
 - DB / Repository / Business / Block / Workflow / Main / mapped functions 不可 mock。
@@ -50,7 +54,7 @@ HoldLot/
 optional mock setup
 -> own prepare.sql
 -> runtime/env parameters
--> CallMain("HoldLot")
+-> CallMain()
 -> Assert observable post-state
 ```
 
@@ -63,6 +67,6 @@ Composite target 的全部 `entry_functions + critical_functions` 必須在同�
 
 ## Protected
 
-不可修改 material、mapping、validator、tools、TestInfrastructure、Test/TestProject/*.vbproj、PROJECT_CONTRACT.md。
+不可修改 material、mapping、validator、tools、TestInfrastructure、Test/*.vbproj、PROJECT_CONTRACT.md。
 
 完成前執行 task context 指定 validator，並傳入 `--block HoldLot`。
