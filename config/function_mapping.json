@@ -7,8 +7,14 @@
       "RouteDispatchBlock.Execute"
     ],
     "critical_functions": [
-      "RouteDecisionService.ResolveRoute",
-      "RouteRepository.QueryCondition"
+      {
+        "name": "RouteDecisionService.ResolveRoute",
+        "min_coverage": 95
+      },
+      {
+        "name": "RouteRepository.QueryCondition",
+        "min_coverage": 80
+      }
     ],
     "min_coverage": 90,
     "forbidden_prepare_tables": [
@@ -24,7 +30,10 @@
       "HoldLotBlock.Execute"
     ],
     "critical_functions": [
-      "RouteRepository.InsertHold"
+      {
+        "name": "RouteRepository.InsertHold",
+        "min_coverage": 90
+      }
     ],
     "min_coverage": 90,
     "forbidden_prepare_tables": [
@@ -40,8 +49,14 @@
       "EquipmentCheckBlock.Execute"
     ],
     "critical_functions": [
-      "EquipmentService.Evaluate",
-      "EquipmentRepository.QueryEquipment"
+      {
+        "name": "EquipmentService.Evaluate",
+        "min_coverage": 90
+      },
+      {
+        "name": "EquipmentRepository.QueryEquipment",
+        "min_coverage": 90
+      }
     ],
     "min_coverage": 90,
     "workflow_type": "Condition"
@@ -54,7 +69,10 @@
       "AlarmNotifyBlock.Execute"
     ],
     "critical_functions": [
-      "FakeHttpClient.Post"
+      {
+        "name": "FakeHttpClient.Post",
+        "min_coverage": 90
+      }
     ],
     "external_mocks": [
       "api"
@@ -72,13 +90,34 @@
       "CommandSubmitBlock.Execute"
     ],
     "critical_functions": [
-      "CommandService.GenerateToken",
-      "CommandRepository.SaveToken",
-      "CommandService.ValidateToken",
-      "CommandRepository.TokenExists",
-      "CommandService.SaveCommand",
-      "CommandRepository.SaveCommand",
-      "FakeMqClient.Publish"
+      {
+        "name": "CommandService.GenerateToken",
+        "min_coverage": 90
+      },
+      {
+        "name": "CommandRepository.SaveToken",
+        "min_coverage": 90
+      },
+      {
+        "name": "CommandService.ValidateToken",
+        "min_coverage": 95
+      },
+      {
+        "name": "CommandRepository.TokenExists",
+        "min_coverage": 90
+      },
+      {
+        "name": "CommandService.SaveCommand",
+        "min_coverage": 90
+      },
+      {
+        "name": "CommandRepository.SaveCommand",
+        "min_coverage": 90
+      },
+      {
+        "name": "FakeMqClient.Publish",
+        "min_coverage": 90
+      }
     ],
     "external_mocks": [
       "mq"

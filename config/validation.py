@@ -45,6 +45,7 @@ configure_paths()
 from ai_task_runner_validator import ValidatorReport
 from coverage_parser import parse_coverage, resolve, candidates
 
+
 def read(path):
     return path.read_text(encoding="utf-8-sig", errors="replace")
 
@@ -263,7 +264,11 @@ class CheatChecker(Checker):
 
             prepare_files = sorted(
                 item for item in sop.iterdir()
-                if item.is_file() and re.fullmatch(r"prepare(?:\.[A-Za-z0-9_-]+)?\.sql", item.name, re.I)
+                if item.is_file() and re.fullmatch(
+                    r"prepare(?:\.[A-Za-z0-9_-]+)?\.sql",
+                    item.name,
+                    re.I,
+                )
             )
 
             for prepare in prepare_files:
@@ -284,8 +289,9 @@ class CheatChecker(Checker):
 
                 for table in self.cfg.get("forbidden_prepare_tables", []):
                     if re.search(
-                        r"\b(INSERT\s+INTO|INSERT_IF_NOT_EXISTS\s+INTO|UPSERT_STATUS\s+INTO)\s+" +
-                        re.escape(table) + r"\b",
+                        r"\b(INSERT\s+INTO|INSERT_IF_NOT_EXISTS\s+INTO|UPSERT_STATUS\s+INTO)\s+"
+                        + re.escape(table)
+                        + r"\b",
                         sql,
                         re.I,
                     ):
@@ -330,15 +336,21 @@ class CoverageChecker(Checker):
                 TEST,
             )
             return
+
         project = projects[0]
 
         dotnet = shutil.which("dotnet")
         coverage = shutil.which("dotnet-coverage")
-        coverage = Path(coverage) if coverage else Path.home() / ".dotnet" / "tools" / "dotnet-coverage.exe"
+        coverage = (
+            Path(coverage)
+            if coverage
+            else Path.home() / ".dotnet" / "tools" / "dotnet-coverage.exe"
+        )
 
         if not dotnet:
             self.error("COVERAGE_TOOL", "dotnet SDK not found")
             return
+
         if not coverage.is_file():
             self.error("COVERAGE_TOOL", "dotnet-coverage not found")
             return
@@ -347,16 +359,38 @@ class CoverageChecker(Checker):
         xml.unlink(missing_ok=True)
 
         restore_cmd = [
-            dotnet, "restore", str(project), "--nologo",
+            dotnet,
+            "restore",
+            str(project),
+            "--nologo",
         ]
-        if not self._run(restore_cmd, ROOT, "restore.log", "COVERAGE_RESTORE", "Restore failed"):
+
+        if not self._run(
+            restore_cmd,
+            ROOT,
+            "restore.log",
+            "COVERAGE_RESTORE",
+            "Restore failed",
+        ):
             return
 
         build_cmd = [
-            dotnet, "build", str(project), "--no-restore",
-            "--configuration", "Debug", "--nologo",
+            dotnet,
+            "build",
+            str(project),
+            "--no-restore",
+            "--configuration",
+            "Debug",
+            "--nologo",
         ]
-        if not self._run(build_cmd, ROOT, "build.log", "COVERAGE_BUILD", "Build failed"):
+
+        if not self._run(
+            build_cmd,
+            ROOT,
+            "build.log",
+            "COVERAGE_BUILD",
+            "Build failed",
+        ):
             return
 
         target = (
@@ -368,7 +402,15 @@ class CoverageChecker(Checker):
         )
 
         p = subprocess.run(
-            [str(coverage), "collect", target, "-f", "cobertura", "-o", str(xml)],
+            [
+                str(coverage),
+                "collect",
+                target,
+                "-f",
+                "cobertura",
+                "-o",
+                str(xml),
+            ],
             cwd=TEST,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
@@ -385,6 +427,7 @@ class CoverageChecker(Checker):
             + "\n\n"
             + decode(p.stdout)
         )
+
         self.report.write_report("test.log", test_output)
 
         if (
@@ -415,20 +458,59 @@ class CoverageChecker(Checker):
             return
 
         items = parse_coverage(xml)
-        threshold = float(self.cfg.get("min_coverage", 90))
+
+        default_threshold = float(self.cfg.get("min_coverage", 90))
         coverage_lines = []
 
         entries = self.cfg.get("entry_functions")
         if not entries:
             entries = [self.cfg["entry_function"]]
 
-        for target in entries + self.cfg.get("critical_functions", []):
+        # Entry functions keep the existing block-level min_coverage.
+        coverage_targets = [
+            (target, default_threshold)
+            for target in entries
+        ]
+
+        # Critical functions support both:
+        #   "Function.Name"
+        #   {"name": "Function.Name", "min_coverage": 80}
+        for item in self.cfg.get("critical_functions", []):
+            if isinstance(item, str):
+                coverage_targets.append((item, default_threshold))
+            elif isinstance(item, dict):
+                target = item.get("name")
+                if not target:
+                    self.error(
+                        "COVERAGE_CONFIG",
+                        "Critical function name missing",
+                        item,
+                        fix="Set critical_functions item to a function name or an object with name.",
+                    )
+                    continue
+
+                threshold = float(
+                    item.get("min_coverage", default_threshold)
+                )
+                coverage_targets.append((target, threshold))
+            else:
+                self.error(
+                    "COVERAGE_CONFIG",
+                    "Invalid critical_functions item",
+                    item,
+                    fix="Use a string or {\"name\": \"Function.Name\", \"min_coverage\": 90}.",
+                )
+
+        for target, threshold in coverage_targets:
             matches = resolve(items, target)
+
             if len(matches) != 1:
                 nearby = candidates(items, target) or ["no candidates"]
+
                 coverage_lines.append(
                     f"FAIL {target}: mapping failed; candidates={nearby}"
                 )
+
                 self.error(
                     "COVERAGE_MAP",
                     "Coverage function mapping failed",
@@ -439,6 +521,7 @@ class CoverageChecker(Checker):
                 continue
 
             pct = float(matches[0].coverage_percent)
+
             coverage_lines.append(
                 f"{'PASS' if pct > threshold else 'FAIL'} {target}: "
                 f"{pct:.2f}% (required > {threshold:.2f}%)"
@@ -452,7 +535,10 @@ class CoverageChecker(Checker):
                     fix="Add/repair E2E cases through Main; do not call mapped functions directly.",
                 )
             else:
-                self.ok(f"{target}: {pct:.2f}%")
+                self.ok(
+                    f"{target}: {pct:.2f}% "
+                    f"(required > {threshold:.2f}%)"
+                )
 
         self.report.write_report(
             "coverage.txt",
@@ -470,7 +556,13 @@ class CoverageChecker(Checker):
             stderr=subprocess.STDOUT,
             text=False,
         )
-        output = "COMMAND: " + " ".join(cmd) + "\n\n" + decode(p.stdout)
+
+        output = (
+            "COMMAND: "
+            + " ".join(cmd)
+            + "\n\n"
+            + decode(p.stdout)
+        )
 
         if p.returncode:
             self.error(
@@ -495,24 +587,36 @@ def main():
     args = ap.parse_args()
 
     configure_paths(args.project_root)
+
     if args.block not in MAPPING:
         ap.error(
             "--block must be one of: "
             + ", ".join(sorted(MAPPING))
         )
 
-    report = ValidatorReport(TEST, f"e2e-{args.block}", stdout_items=20)
+    report = ValidatorReport(
+        TEST,
+        f"e2e-{args.block}",
+        stdout_items=20,
+    )
     info = []
 
     StructureChecker(args.block, report, info).run()
+
     if not report.errors:
         CheatChecker(args.block, report, info).run()
+
     if not report.errors:
         CoverageChecker(args.block, report, info).run()
 
-    report.write_report("info.txt", info or ["No info."])
+    report.write_report(
+        "info.txt",
+        info or ["No info."],
+    )
+
     write_review_markdown(args.block, report)
     update_project_review()
+
     report.write_report(
         "validation_report.txt",
         [
