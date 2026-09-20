@@ -4,6 +4,8 @@ Review only. Do not modify files.
 
 把 `--block` 視為 `function_mapping.json` 定義的 E2E target。
 
+你可以自行執行 build、測試、coverage 計算、TRX/log 檢查等唯讀驗證命令來確認結果；不要只靠閱讀檔案或模型主觀判斷。
+
 確認：
 - Case 是在測 target 本身，不是 AI 自行隨機串接 block；
 - single target 只測自己的 Action/Condition SOP；

@@ -1,0 +1,99 @@
+- project_root: .
+  goal_file: 'C:\Users\kevin\e2e\config\prompts\regression_all\RouteDispatch.md'
+  validator: ai
+  ai_validator_prompt_file: 'C:\Users\kevin\e2e\config\ai_validator.template.md'
+  ai_validator_count: 3
+  ai_validator_required_passes: 2
+  protect_files:
+    - 'C:\Users\kevin\e2e\material'
+    - 'C:\Users\kevin\e2e\config\validation.py'
+    - 'C:\Users\kevin\e2e\config\function_mapping.json'
+    - 'C:\Users\kevin\e2e\config\ai_validator.template.md'
+    - 'C:\Users\kevin\e2e\config\request_prompt.template.md'
+    - 'C:\Users\kevin\e2e\tools'
+    - 'C:\Users\kevin\e2e\Test\TestProject\TestInfrastructure'
+    - 'C:\Users\kevin\e2e\Test\TestProject\TestProject.vbproj'
+    - 'C:\Users\kevin\e2e\Test\TestProject\PROJECT_CONTRACT.md'
+  max_attempts: 2
+  review_retries: 2
+  max_cycles: 20
+
+- project_root: .
+  goal_file: 'C:\Users\kevin\e2e\config\prompts\regression_all\HoldLot.md'
+  validator: ai
+  ai_validator_prompt_file: 'C:\Users\kevin\e2e\config\ai_validator.template.md'
+  ai_validator_count: 3
+  ai_validator_required_passes: 2
+  protect_files:
+    - 'C:\Users\kevin\e2e\material'
+    - 'C:\Users\kevin\e2e\config\validation.py'
+    - 'C:\Users\kevin\e2e\config\function_mapping.json'
+    - 'C:\Users\kevin\e2e\config\ai_validator.template.md'
+    - 'C:\Users\kevin\e2e\config\request_prompt.template.md'
+    - 'C:\Users\kevin\e2e\tools'
+    - 'C:\Users\kevin\e2e\Test\TestProject\TestInfrastructure'
+    - 'C:\Users\kevin\e2e\Test\TestProject\TestProject.vbproj'
+    - 'C:\Users\kevin\e2e\Test\TestProject\PROJECT_CONTRACT.md'
+  max_attempts: 2
+  review_retries: 2
+  max_cycles: 20
+
+- project_root: .
+  goal_file: 'C:\Users\kevin\e2e\config\prompts\regression_all\EquipmentCheck.md'
+  validator: ai
+  ai_validator_prompt_file: 'C:\Users\kevin\e2e\config\ai_validator.template.md'
+  ai_validator_count: 3
+  ai_validator_required_passes: 2
+  protect_files:
+    - 'C:\Users\kevin\e2e\material'
+    - 'C:\Users\kevin\e2e\config\validation.py'
+    - 'C:\Users\kevin\e2e\config\function_mapping.json'
+    - 'C:\Users\kevin\e2e\config\ai_validator.template.md'
+    - 'C:\Users\kevin\e2e\config\request_prompt.template.md'
+    - 'C:\Users\kevin\e2e\tools'
+    - 'C:\Users\kevin\e2e\Test\TestProject\TestInfrastructure'
+    - 'C:\Users\kevin\e2e\Test\TestProject\TestProject.vbproj'
+    - 'C:\Users\kevin\e2e\Test\TestProject\PROJECT_CONTRACT.md'
+  max_attempts: 2
+  review_retries: 2
+  max_cycles: 20
+
+- project_root: .
+  goal_file: 'C:\Users\kevin\e2e\config\prompts\regression_all\AlarmNotify.md'
+  validator: ai
+  ai_validator_prompt_file: 'C:\Users\kevin\e2e\config\ai_validator.template.md'
+  ai_validator_count: 3
+  ai_validator_required_passes: 2
+  protect_files:
+    - 'C:\Users\kevin\e2e\material'
+    - 'C:\Users\kevin\e2e\config\validation.py'
+    - 'C:\Users\kevin\e2e\config\function_mapping.json'
+    - 'C:\Users\kevin\e2e\config\ai_validator.template.md'
+    - 'C:\Users\kevin\e2e\config\request_prompt.template.md'
+    - 'C:\Users\kevin\e2e\tools'
+    - 'C:\Users\kevin\e2e\Test\TestProject\TestInfrastructure'
+    - 'C:\Users\kevin\e2e\Test\TestProject\TestProject.vbproj'
+    - 'C:\Users\kevin\e2e\Test\TestProject\PROJECT_CONTRACT.md'
+  max_attempts: 2
+  review_retries: 2
+  max_cycles: 20
+
+- project_root: .
+  goal_file: 'C:\Users\kevin\e2e\config\prompts\regression_all\TokenGenerate_CommandSubmit.md'
+  validator: ai
+  ai_validator_prompt_file: 'C:\Users\kevin\e2e\config\ai_validator.template.md'
+  ai_validator_count: 3
+  ai_validator_required_passes: 2
+  protect_files:
+    - 'C:\Users\kevin\e2e\material'
+    - 'C:\Users\kevin\e2e\config\validation.py'
+    - 'C:\Users\kevin\e2e\config\function_mapping.json'
+    - 'C:\Users\kevin\e2e\config\ai_validator.template.md'
+    - 'C:\Users\kevin\e2e\config\request_prompt.template.md'
+    - 'C:\Users\kevin\e2e\tools'
+    - 'C:\Users\kevin\e2e\Test\TestProject\TestInfrastructure'
+    - 'C:\Users\kevin\e2e\Test\TestProject\TestProject.vbproj'
+    - 'C:\Users\kevin\e2e\Test\TestProject\PROJECT_CONTRACT.md'
+  max_attempts: 2
+  review_retries: 2
+  max_cycles: 20
